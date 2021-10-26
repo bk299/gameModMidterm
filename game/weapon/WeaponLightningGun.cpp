@@ -809,12 +809,29 @@ rvWeaponLightningGun::State_Fire
 ================
 */
 stateResult_t rvWeaponLightningGun::State_Fire( const stateParms_t& parms ) {
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+
+	const char* key, * value;
+	idDict dict;
+	float yaw;
+	idVec3 org;
+	idEntity* newEnt = NULL;
+
+	yaw = player->viewAngles.yaw;
+	org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+	dict.Set("classname", "char_marine_tech");
+	dict.Set("angle", va("%f", yaw + 180));
+	dict.Set("origin", org.ToString());
+
 	enum {
 		STAGE_INIT,
 		STAGE_ATTACKLOOP,
 		STAGE_DONE,
 		STAGE_DONEWAIT
-	};	
+	};
+
+	
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			StartSound( "snd_fire", SND_CHANNEL_WEAPON, 0, false, NULL );
@@ -831,6 +848,12 @@ stateResult_t rvWeaponLightningGun::State_Fire( const stateParms_t& parms ) {
   			}
 
 			PlayAnim( ANIMCHANNEL_ALL, "shoot_start", parms.blendFrames );
+			//Spawns on fire
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			if (newEnt) {
+				gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+			}
 			return SRESULT_STAGE( STAGE_ATTACKLOOP );
 		
 		case STAGE_ATTACKLOOP:

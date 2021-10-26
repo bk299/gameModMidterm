@@ -387,6 +387,21 @@ WeaponNapalmGun::State_Fire
 ================
 */
 stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+
+	const char* key, * value;
+	idDict dict;
+	float yaw;
+	idVec3 org;
+	idEntity* newEnt = NULL;
+
+	yaw = player->viewAngles.yaw;
+	org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+	dict.Set("classname", "char_npc_officer_core");
+	dict.Set("angle", va("%f", yaw + 180));
+	dict.Set("origin", org.ToString());
+	
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -395,12 +410,22 @@ stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
 		case STAGE_INIT:
 			if ( wsfl.zoom ) {
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( true, 1, spread, 0, 1.0f );
+				//Attack ( true, 1, spread, 0, 1.0f );
+				//Spawns on fire
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				if (newEnt) {
+					gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+				}
 				PlayAnim ( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
 				//fireHeld = true;
 			} else {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( false, 1, spread, 0, 1.0f );
+				//Attack ( false, 1, spread, 0, 1.0f );
+				//Spawns on fire
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				if (newEnt) {
+					gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+				}
 
 				int animNum = viewModel->GetAnimator()->GetAnim ( "fire" );
 				if ( animNum ) {

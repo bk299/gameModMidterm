@@ -635,6 +635,21 @@ Fire the weapon
 ================
 */
 stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+
+	const char* key, * value;
+	idDict dict;
+	float yaw;
+	idVec3 org;
+	idEntity* newEnt = NULL;
+
+	yaw = player->viewAngles.yaw;
+	org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+	dict.Set("classname", "char_marine_npc_officer_core");
+	dict.Set("angle", va("%f", yaw + 180));
+	dict.Set("origin", org.ToString());
+
 	enum {
 		STAGE_INIT,
 		STAGE_FIRE,
@@ -644,6 +659,7 @@ stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
 	};	
 	switch ( parms.stage ) {
 		case STAGE_INIT:
+		
 			if ( !wsfl.attack ) {
 				SetState ( "Idle", parms.blendFrames );				
 				return SRESULT_DONE;
@@ -657,6 +673,7 @@ stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
 			return SRESULT_STAGE ( STAGE_FIRE );
 			
 		case STAGE_FIRE:
+
 			if ( !wsfl.attack || wsfl.reload || wsfl.lowerWeapon || AmmoInClip ( ) <= 0 ) {
 				return SRESULT_STAGE ( STAGE_DONE );
 			}
@@ -667,10 +684,20 @@ stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
 			}
 
 			if ( wsfl.zoom ) {				
-				Attack ( true, 1, spread, 0.0f, 1.0f );
+				//Attack ( true, 1, spread, 0.0f, 1.0f );
+				//Spawns on fire
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				if (newEnt) {
+					gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+				}
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			} else {
-				Attack ( false, 1, spread, 0.0f, 1.0f );
+				//Attack ( false, 1, spread, 0.0f, 1.0f );
+				//Spawns on fire
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				if (newEnt) {
+					gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+				}
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			}
 			

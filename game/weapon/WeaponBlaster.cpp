@@ -398,6 +398,22 @@ rvWeaponBlaster::State_Fire
 ================
 */
 stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+
+	const char* key, * value;
+	idDict dict;
+	float yaw;
+	idVec3 org;
+	idEntity* newEnt = NULL;
+
+	yaw = player->viewAngles.yaw;
+	org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+	dict.Set("classname", "char_doctor");
+	dict.Set("angle", va("%f", yaw + 180));
+	dict.Set("origin", org.ToString());
+
+
 	enum {
 		FIRE_INIT,
 		FIRE_WAIT,
@@ -408,8 +424,7 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 			StopSound ( SND_CHANNEL_ITEM, false );
 			viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, 0 );
 			//don't fire if we're targeting a gui.
-			idPlayer* player;
-			player = gameLocal.GetLocalPlayer();
+
 
 			//make sure the player isn't looking at a gui first
 			if( player && player->GuiActive() )	{
@@ -424,14 +439,18 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				return SRESULT_DONE;
 			}
 
-
 	
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
 				Attack ( true, 1, spread, 0, 1.0f );
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
 			} else {
-				Attack ( false, 1, spread, 0, 1.0f );
+				//Attack ( false, 1, spread, 0, 1.0f );
+				//Spawns on fire
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				if (newEnt) {
+					gameLocal.Printf("spawned entity '%s'\n", newEnt->name.c_str());
+				}
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			}
