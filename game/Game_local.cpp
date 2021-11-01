@@ -3472,6 +3472,40 @@ idGameLocal::RunFrame
 
 	player = GetLocalPlayer();
 
+	const char* key, * value;
+	idDict dict1;
+	idDict dict2;
+	idDict dict3;
+	idDict dict4;
+	idDict dict5;
+	float yaw;
+	idVec3 org;
+	idEntity* newEnt = NULL;
+
+	yaw = 0;
+	org.Set(10040, -7520, 160);
+
+	dict1.Set("classname", "char_marinehead_half");
+	dict1.Set("angle", va("%f", yaw));
+	dict1.Set("origin", org.ToString());
+
+	dict2.Set("classname", "char_marinehead_shot");
+	dict2.Set("angle", va("%f", yaw));
+	dict2.Set("origin", org.ToString());
+
+	dict3.Set("classname", "char_marinehead_default");
+	dict3.Set("angle", va("%f", yaw));
+	dict3.Set("origin", org.ToString());
+
+	dict4.Set("classname", "char_marinehead_doctor_masked");
+	dict4.Set("angle", va("%f", yaw));
+	dict4.Set("origin", org.ToString());
+
+	dict5.Set("classname", "char_marinehead_helmet");
+	dict5.Set("angle", va("%f", yaw));
+	dict5.Set("origin", org.ToString());
+
+
 	if ( !isMultiplayer && g_stopTime.GetBool() ) {
 
 		// set the user commands for this frame
@@ -3489,7 +3523,10 @@ idGameLocal::RunFrame
 		previousTime = time;
 		// bdube: use GetMSec access rather than USERCMD_TIME
 		time += GetMSec();
-
+		if (time == 200000 || time == 202000 || time == 204000 || 
+			time == 206000 || time == 208000 || time == 210000) {
+			gameLocal.SpawnEntityDef(dict1, &newEnt);
+		}
 		realClientTime = time;
 		{
 TIME_THIS_SCOPE("idGameLocal::RunFrame - gameDebug.BeginFrame()");
