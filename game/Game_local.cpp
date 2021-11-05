@@ -3485,23 +3485,23 @@ idGameLocal::RunFrame
 	yaw = 0;
 	org.Set(10040, -7520, 160);
 
-	dict1.Set("classname", "char_marinehead_half");
+	dict1.Set("classname", "monster_scientist");
 	dict1.Set("angle", va("%f", yaw));
 	dict1.Set("origin", org.ToString());
 
-	dict2.Set("classname", "char_marinehead_shot");
+	dict2.Set("classname", "monster_sentry");
 	dict2.Set("angle", va("%f", yaw));
 	dict2.Set("origin", org.ToString());
 
-	dict3.Set("classname", "char_marinehead_default");
+	dict3.Set("classname", "monster_strogg_marine");
 	dict3.Set("angle", va("%f", yaw));
 	dict3.Set("origin", org.ToString());
 
-	dict4.Set("classname", "char_marinehead_doctor_masked");
+	dict4.Set("classname", "monster_berserker");
 	dict4.Set("angle", va("%f", yaw));
 	dict4.Set("origin", org.ToString());
 
-	dict5.Set("classname", "char_marinehead_helmet");
+	dict5.Set("classname", "monster_gunner");
 	dict5.Set("angle", va("%f", yaw));
 	dict5.Set("origin", org.ToString());
 

@@ -110,20 +110,7 @@ rvMonsterBerserker::CheckAction_ChargeAttack
 ================
 */
 bool rvMonsterBerserker::CheckAction_ChargeAttack ( rvAIAction* action, int animNum ) {
-	if ( !enemy.ent || !enemy.fl.inFov ) {
-		return false;
-	}
-	if ( GetEnemy() && GetEnemy()->GetPhysics()->GetOrigin().z > GetPhysics()->GetOrigin().z + 24.0f )
-	{//this is a ground attack and enemy is above me, so don't even try it, stupid!
-		return false;
-	}
-	if ( !IsEnemyRecentlyVisible ( ) || enemy.ent->DistanceTo ( enemy.lastKnownPosition ) > 128.0f ) {
-		return false;
-	}
-	if ( animNum != -1 && !CanHitEnemyFromAnim( animNum ) ) {
-		return false;
-	}
-	return true;
+	return false;
 }
 
 /*
@@ -132,37 +119,7 @@ rvMonsterBerserker::CanHitEnemyFromAnim
 ============
 */
 bool rvMonsterBerserker::Berz_CanHitEnemyFromAnim( int animNum ) {
-	idVec3		dir;
-	idVec3		local_dir;
-	idVec3		fromPos;
-	idMat3		axis;
-	idVec3		start;
-	idEntity*	enemyEnt;
-
-	// Need an enemy.
-	if ( !enemy.ent ) {
-		return false;
-	}
-
-	// Enemy actor pointer
-	enemyEnt = static_cast<idEntity*>(enemy.ent.GetEntity());
-
-	// just do a ray test if close enough
-	if ( enemyEnt->GetPhysics()->GetAbsBounds().IntersectsBounds( physicsObj.GetAbsBounds().Expand( 16.0f ) ) ) {
-		return CanHitEnemy();
-	}
-
-	// calculate the world transform of the launch position
-  	idVec3 org = physicsObj.GetOrigin();
-	idVec3 from;
-  	dir = enemy.lastVisibleChestPosition - org;
-  	physicsObj.GetGravityAxis().ProjectVector( dir, local_dir );
-  	local_dir.z = 0.0f;
-  	local_dir.ToVec2().Normalize();
-  	axis = local_dir.ToMat3();
-  	from = org + attackAnimInfo[ animNum ].attackOffset * axis;
-
-	return CanSeeFrom ( from, enemy.lastVisibleEyePosition, true );
+	return false;
 }
 
 /*
@@ -171,16 +128,7 @@ rvMonsterBerserker::CheckAction_RangedAttack
 ================
 */
 bool rvMonsterBerserker::CheckAction_RangedAttack ( rvAIAction* action, int animNum ) {
-	if ( !enemy.ent || !enemy.fl.inFov ) {
-		return false;
-	}
-	if ( !IsEnemyRecentlyVisible ( ) || enemy.ent->DistanceTo ( enemy.lastKnownPosition ) > 128.0f ) {
-		return false;
-	}
-	if ( animNum != -1 && !Berz_CanHitEnemyFromAnim( animNum ) ) {
-		return false;
-	}
-	return true;
+	return false;
 }
 
 /*
@@ -189,50 +137,6 @@ rvMonsterBerserker::CheckActions
 ================
 */
 bool rvMonsterBerserker::CheckActions ( void ) {
-	// Pop-up attack is a forward moving melee attack that throws the enemy up in the air
-	if ( PerformAction ( &actionPopupAttack, (checkAction_t)&idAI::CheckAction_LeapAttack, &actionTimerSpecialAttack ) ) {
-		return true;
-	}
-
-	// Charge attack is where the berserker will charge up his spike and slam it in to the ground
-	if ( PerformAction ( &actionChargeAttack, (checkAction_t)&rvMonsterBerserker::CheckAction_ChargeAttack, &actionTimerSpecialAttack ) ) {
-		return true;
-	}
-
-	if ( CheckPainActions ( ) ) {
-		return true;
-	}
-
-	if ( PerformAction ( &actionEvadeLeft,   (checkAction_t)&idAI::CheckAction_EvadeLeft, &actionTimerEvade )			 ||
-			PerformAction ( &actionEvadeRight,  (checkAction_t)&idAI::CheckAction_EvadeRight, &actionTimerEvade )			 ||
-			PerformAction ( &actionJumpBack,	 (checkAction_t)&idAI::CheckAction_JumpBack, &actionTimerEvade )			 ||
-			PerformAction ( &actionLeapAttack,  (checkAction_t)&idAI::CheckAction_LeapAttack )	) {
-		return true;
-	} else if ( PerformAction ( &actionMeleeAttack, (checkAction_t)&idAI::CheckAction_MeleeAttack ) ) {
-		standingMeleeNoAttackTime = 0;
-		return true;
-	} else {
-		if ( actionMeleeAttack.status != rvAIAction::STATUS_FAIL_TIMER
-			&& actionMeleeAttack.status != rvAIAction::STATUS_FAIL_EXTERNALTIMER
-			&& actionMeleeAttack.status != rvAIAction::STATUS_FAIL_CHANCE )
-		{//melee attack fail for any reason other than timer?
-			if ( combat.tacticalCurrent == AITACTICAL_MELEE && !move.fl.moving )
-			{//special case: we're in tactical melee and we're close enough to think we've reached the enemy, but he's just out of melee range!
-				//allow ranged attack
-				if ( !standingMeleeNoAttackTime )
-				{
-					standingMeleeNoAttackTime = gameLocal.GetTime();
-				}
-				else if ( standingMeleeNoAttackTime + 2500 < gameLocal.GetTime() )
-				{//we've been standing still and not attacking for at least 2.5 seconds, fall back to ranged attack
-					actionRangedAttack.fl.disabled = false;
-				}
-			}
-		}
-		if ( PerformAction ( &actionRangedAttack,(checkAction_t)&rvMonsterBerserker::CheckAction_RangedAttack, &actionTimerRangedAttack ) ) {
-			return true;
-		}
-	}
 	return false;
 }
 /*

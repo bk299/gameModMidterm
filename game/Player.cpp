@@ -3399,6 +3399,24 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 		_hud->SetStateFloat	( "player_healthpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)health / (float)inventory.maxHealth ) );
 		_hud->HandleNamedEvent ( "updateHealth" );
 	}
+
+	//custom HUD
+	_hud->SetStateInt("player_money", inventory.money < 0 ? 0 : inventory.money);
+	_hud->HandleNamedEvent("updateMoney");
+
+	_hud->SetStateInt("player_lives", inventory.lives < 0 ? 0 : inventory.lives);
+	_hud->HandleNamedEvent("updateLives");
+
+	_hud->SetStateInt("player_money", 100);
+	_hud->SetStateInt("player_lives", 20);
+
+
+	if (gameLocal.time > 0 && gameLocal.time < 200000) {
+		_hud->SetStateInt("wave", 0);
+	}
+	if (gameLocal.time > 200000 && gameLocal.time < 220000) {
+		_hud->SetStateInt("wave", 1);
+	}
 		
 	temp = _hud->State().GetInt ( "player_armor", "-1" );
 	if ( temp != inventory.armor ) {
@@ -7210,6 +7228,9 @@ void idPlayer::UpdateFocus( void ) {
 
 				ui->SetStateString( "player_health", va("%i", health ) );
 				ui->SetStateString( "player_armor", va( "%i%%", inventory.armor ) );
+				ui->SetStateString("player_money", va("%i%%", inventory.money));
+				ui->SetStateString("player_lives", va("%i%%", inventory.lives));
+				ui->SetStateString("wave", va("%i%%", inventory.wave));
 
 				kv = ent->spawnArgs.MatchPrefix( "gui_", NULL );
 				while ( kv ) {

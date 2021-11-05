@@ -196,6 +196,9 @@ class idInventory {
 public:
 	int						maxHealth;
 	int						weapons;
+	int						money;
+	int						lives;
+	int						wave;
 // RITUAL BEGIN
 // squirrel: Mode-agnostic buymenus
 	int						carryOverWeapons;
