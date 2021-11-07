@@ -116,7 +116,7 @@ const idEventDef EV_Player_DisableObjectives( "disableObjectives" );
 
 // mekberg: don't suppress showing of new objectives anymore
 const idEventDef EV_Player_AllowNewObjectives( "<allownewobjectives>" );
-
+float mult = 1;
 // RAVEN END
 
 CLASS_DECLARATION( idActor, idPlayer )
@@ -8566,9 +8566,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 			break;
 		}
 		case IMPULSE_22: {
- 			if ( gameLocal.isClient || entityNumber == gameLocal.localClientNum ) {
- 				gameLocal.mpGame.ToggleSpectate( );
-   			}
+			mult = mult + .5; gameLocal.Printf("%f\n", mult);
    			break;
    		}
 				
@@ -8622,7 +8620,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 // RITUAL END
 
 		case IMPULSE_50: {
-			ToggleFlashlight ( );
+			gameLocal.Printf("Help screen\n");
 			break;
 		}
 
@@ -8745,7 +8743,7 @@ void idPlayer::EvaluateControls( void ) {
 
 	oldFlags = usercmd.flags;
 
-	AdjustSpeed();
+	AdjustSpeed(mult);
 
 	// update the viewangles
 	UpdateViewAngles();
@@ -8756,20 +8754,20 @@ void idPlayer::EvaluateControls( void ) {
 idPlayer::AdjustSpeed
 ==============
 */
-void idPlayer::AdjustSpeed( void ) {
+void idPlayer::AdjustSpeed( float mult ) {
 	float speed;
 
 	if ( spectating ) {
-		speed = pm_spectatespeed.GetFloat();
+		speed = pm_spectatespeed.GetFloat() * mult;
 		bobFrac = 0.0f;
 	} else if ( noclip ) {
-		speed = pm_noclipspeed.GetFloat();
+		speed = pm_noclipspeed.GetFloat() * mult;
 		bobFrac = 0.0f;
  	} else if ( !physicsObj.OnLadder() && ( usercmd.buttons & BUTTON_RUN ) && ( usercmd.forwardmove || usercmd.rightmove ) && ( usercmd.upmove >= 0 ) ) {
 		bobFrac = 1.0f;
-		speed = pm_speed.GetFloat();
+		speed = pm_speed.GetFloat() * mult;
 	} else {
-		speed = pm_walkspeed.GetFloat();
+		speed = pm_walkspeed.GetFloat() * mult;
 		bobFrac = 0.0f;
 	}
 
@@ -11860,7 +11858,7 @@ void idPlayer::LocalClientPredictionThink( void ) {
 		return;
 	}
 
-	AdjustSpeed();
+	AdjustSpeed(mult);
 
 	UpdateViewAngles();
 
@@ -12043,7 +12041,7 @@ void idPlayer::NonLocalClientPredictionThink( void ) {
 	}
 #endif
 
-	AdjustSpeed();
+	AdjustSpeed(mult);
 
 	UpdateViewAngles();
 

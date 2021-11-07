@@ -8687,8 +8687,7 @@ idPlayer::AdjustSpeed
 ==============
 */
 void idPlayer::AdjustSpeed( void ) {
-	float speed;
-
+	
 	if ( spectating ) {
 		speed = pm_spectatespeed.GetFloat();
 		bobFrac = 0.0f;

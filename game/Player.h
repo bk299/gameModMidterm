@@ -1030,7 +1030,7 @@ private:
 	void					CrashLand( const idVec3 &oldOrigin, const idVec3 &oldVelocity );
 	void					BobCycle( const idVec3 &pushVelocity );
 	void					EvaluateControls( void );
-	void					AdjustSpeed( void );
+	void					AdjustSpeed( float mult );
 	void					AdjustBodyAngles( void );
 	void					Move( void );
 	void					SetSpectateOrigin( void );
