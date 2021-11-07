@@ -1020,7 +1020,7 @@ private:
 	void					EvaluateControls( void );
 	void					AdjustSpeed( void );
 	void					AdjustBodyAngles( void );
-	void					Move( void );
+	void					Move(  );
 	void					SetSpectateOrigin( void );
 
  	void					InitAASLocation( void );

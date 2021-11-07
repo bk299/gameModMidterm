@@ -3342,7 +3342,7 @@ bool idPlayer::UserInfoChanged( void ) {
 
 	return modifiedInfo;
 }
-   
+
 /*
 ===============
 idPlayer::UpdateHudAmmo
@@ -3353,7 +3353,7 @@ void idPlayer::UpdateHudAmmo( idUserInterface *_hud ) {
 	int ammoamount;
 
 	assert( weapon );
-	assert( _hud );
+
 
 	inclip		= weapon->AmmoInClip();
 	ammoamount	= weapon->AmmoAvailable();
@@ -3387,10 +3387,12 @@ void idPlayer::UpdateHudAmmo( idUserInterface *_hud ) {
 idPlayer::UpdateHudStats
 ===============
 */
+int lives = 20;
+int money = 1000;
 void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	int temp;
 	
-	assert ( _hud );
+
 
 	temp = _hud->State().GetInt ( "player_health", "-1" );
 	if ( temp != health ) {		
@@ -3407,8 +3409,8 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	_hud->SetStateInt("player_lives", inventory.lives < 0 ? 0 : inventory.lives);
 	_hud->HandleNamedEvent("updateLives");
 
-	_hud->SetStateInt("player_money", 100);
-	_hud->SetStateInt("player_lives", 20);
+	_hud->SetStateInt("player_money", money);
+	_hud->SetStateInt("player_lives", lives);
 
 
 	if (gameLocal.time > 0 && gameLocal.time < 200000) {
@@ -8566,14 +8568,18 @@ void idPlayer::PerformImpulse( int impulse ) {
 			break;
 		}
 		case IMPULSE_22: {
-			mult = mult + .5; gameLocal.Printf("%f\n", mult);
+			if (money >= 100) {
+				mult = mult + .5; gameLocal.Printf("%f\n", mult);
+				money = money - 100;
+			}
    			break;
    		}
 				
 		case IMPULSE_28: {
- 			if ( gameLocal.isClient || entityNumber == gameLocal.localClientNum ) {
- 				gameLocal.mpGame.CastVote( gameLocal.localClientNum, true );
-   			}
+			if (money >= 50) {
+				lives = lives + 1; gameLocal.Printf("%d\n", lives);
+				money = money - 50;
+			}
    			break;
    		}
    		case IMPULSE_29: {
