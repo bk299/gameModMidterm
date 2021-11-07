@@ -3391,7 +3391,11 @@ int lives = 20;
 int money = 1000;
 void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	int temp;
-	
+	if (lives == 0) {
+		health = health - 100;
+		lives = 20;
+		money = 1000;
+	}
 
 
 	temp = _hud->State().GetInt ( "player_health", "-1" );
@@ -8583,9 +8587,10 @@ void idPlayer::PerformImpulse( int impulse ) {
    			break;
    		}
    		case IMPULSE_29: {
- 			if ( gameLocal.isClient || entityNumber == gameLocal.localClientNum ) {
-				gameLocal.mpGame.CastVote( gameLocal.localClientNum, false );
-   			}
+			if (lives >= 1) {
+				money = money + 30; gameLocal.Printf("%d\n", money);
+				lives = lives - 1;
+			}
    			break;
    		}
 		case IMPULSE_40: {
