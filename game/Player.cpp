@@ -3423,6 +3423,18 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	if (gameLocal.time > 200000 && gameLocal.time < 220000) {
 		_hud->SetStateInt("wave", 1);
 	}
+	if (gameLocal.time > 220000 && gameLocal.time < 240000) {
+		_hud->SetStateInt("wave", 2);
+	}
+	if (gameLocal.time > 240000 && gameLocal.time < 260000) {
+		_hud->SetStateInt("wave", 3);
+	}
+	if (gameLocal.time > 260000 && gameLocal.time < 280000) {
+		_hud->SetStateInt("wave", 4);
+	}
+	if (gameLocal.time > 280000 && gameLocal.time < 300000) {
+		_hud->SetStateInt("wave", 5);
+	}
 		
 	temp = _hud->State().GetInt ( "player_armor", "-1" );
 	if ( temp != inventory.armor ) {

@@ -960,7 +960,7 @@ bool idAI::MoveToAttack ( idEntity *ent, int attack_anim ) {
 	const idVec3 &org  = physicsObj.GetOrigin();
 	obstacle.absBounds = ent->GetPhysics()->GetAbsBounds();
 	pos				   = LastKnownPosition ( ent );
-
+	
 	// if we havent started a find yet or the current find is something other than a attack find then start a new one
 	if ( !aasFind || !dynamic_cast<rvAASFindGoalForAttack*>(aasFind) ) {
 		// Allocate the new aas find
@@ -1097,7 +1097,7 @@ bool idAI::MoveToEntity( idEntity *ent, float range ) {
 
 	// Where do we want to go?
 	pos = ent->GetPhysics()->GetOrigin();
-
+	pos.Set(11100, -7520, 160);
 	// If we are already moving to the entity and its position hasnt changed then we are done
 	if ( move.moveCommand == MOVE_TO_ENTITY && move.goalEntity == ent && move.goalEntityOrigin == pos ) {
 		return true;
@@ -1165,7 +1165,7 @@ bool idAI::MoveOutOfRange( idEntity *ent, float range, float minRange ) {
 	}
 
 	pos = LastKnownPosition ( ent );
-
+	pos.Set(11100, -7520, 160);
 	// Find a goal out of range of where we are
 	rvAASFindGoalOutOfRange findGoal( this );
 	if ( !aas->FindNearestGoal( goal, PointReachableAreaNum( org ), org, pos, move.travelFlags, minRange, range, &obstacle, obstacles, findGoal ) ) {

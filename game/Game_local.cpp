@@ -3489,19 +3489,19 @@ idGameLocal::RunFrame
 	dict1.Set("angle", va("%f", yaw));
 	dict1.Set("origin", org.ToString());
 
-	dict2.Set("classname", "monster_sentry");
+	dict2.Set("classname", "monster_strogg_marine");
 	dict2.Set("angle", va("%f", yaw));
 	dict2.Set("origin", org.ToString());
 
-	dict3.Set("classname", "monster_strogg_marine");
+	dict3.Set("classname", "monster_berserker");
 	dict3.Set("angle", va("%f", yaw));
 	dict3.Set("origin", org.ToString());
 
-	dict4.Set("classname", "monster_berserker");
+	dict4.Set("classname", "monster_gunner");
 	dict4.Set("angle", va("%f", yaw));
 	dict4.Set("origin", org.ToString());
 
-	dict5.Set("classname", "monster_gunner");
+	dict5.Set("classname", "monster_grunt");
 	dict5.Set("angle", va("%f", yaw));
 	dict5.Set("origin", org.ToString());
 
@@ -3526,6 +3526,22 @@ idGameLocal::RunFrame
 		if (time == 200000 || time == 202000 || time == 204000 || 
 			time == 206000 || time == 208000 || time == 210000) {
 			gameLocal.SpawnEntityDef(dict1, &newEnt);
+		}
+		if (time == 220000 || time == 222000 || time == 224000 ||
+			time == 226000 || time == 228000 || time == 230000) {
+			gameLocal.SpawnEntityDef(dict2, &newEnt);
+		}
+		if (time == 240000 || time == 242000 || time == 244000 ||
+			time == 246000 || time == 248000 || time == 250000) {
+			gameLocal.SpawnEntityDef(dict3, &newEnt);
+		}
+		if (time == 260000 || time == 262000 || time == 264000 ||
+			time == 266000 || time == 268000 || time == 270000) {
+			gameLocal.SpawnEntityDef(dict4, &newEnt);
+		}
+		if (time == 280000 || time == 282000 || time == 284000 ||
+			time == 286000 || time == 288000 || time == 290000) {
+			gameLocal.SpawnEntityDef(dict5, &newEnt);
 		}
 		realClientTime = time;
 		{
