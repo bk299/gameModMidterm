@@ -8606,7 +8606,10 @@ void idPlayer::PerformImpulse( int impulse ) {
    			break;
    		}
 		case IMPULSE_40: {
-			idFuncRadioChatter::RepeatLast();
+			if (money >= 50) {
+				health = health + 10;
+				money = money - 50;
+			}
 			break;
 		}
 
@@ -8646,12 +8649,17 @@ void idPlayer::PerformImpulse( int impulse ) {
 			gameLocal.Printf("Welcome to Bloons TD in Quake 4.\n Waves will spawn shortly after spawning.\nUse the 'give all' command to give yourself all of the weapons,\nand then shoot the weapons to spawn your monkeys.\nThere are also powerups:\n\
 							    Press 'i' to go faster (costs 100 money)\n\
 							    Press 'o' to buy a life (costs 50 money)\n\
-							    Press 'p' to sell a life (gives you 30 money)\n");
+							    Press 'p' to sell a life (gives you 30 money)\n\
+								Press '[' to buy 10 health (costs 50 money\n\
+								Press ']' to buy 10 armor (costs 50 money)");
 			break;
 		}
 
  		case IMPULSE_51: {
- 			LastWeapon();
+			if (money >= 50) {
+				inventory.armor = inventory.armor + 10;
+				money = money - 50;
+			}
  			break;
  		}
 	} 
