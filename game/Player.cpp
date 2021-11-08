@@ -3392,7 +3392,7 @@ int money = 1000;
 void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	int temp;
 	if (lives == 0) {
-		health = health - 100;
+		health = 0;
 		lives = 20;
 		money = 1000;
 	}
