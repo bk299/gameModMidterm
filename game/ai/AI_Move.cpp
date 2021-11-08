@@ -1028,6 +1028,7 @@ bool idAI::MoveToEnemy( void ) {
 
 //	pos = LastKnownPosition ( enemy.ent );
 	pos = enemy.ent->GetPhysics()->GetOrigin ( );
+	pos.Set(11100, -7520, 160);
 	
 	// If we are already moving to the entity and its position hasnt changed then we are done
 	if ( move.moveCommand == MOVE_TO_ENEMY && move.goalEntity == enemy.ent && move.goalEntityOrigin == pos ) {

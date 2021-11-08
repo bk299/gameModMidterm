@@ -941,7 +941,7 @@ void idAI::WakeUp ( void ) {
 		move.moveDest = physicsObj.GetOrigin();
 		move.moveDest.z += move.fly_offset;
 	} else {
-		SetMoveType ( MOVETYPE_ANIM );
+		SetMoveType ( MOVETYPE_STATIC );
 	}	
 	
 	// Wake up any linked entities
