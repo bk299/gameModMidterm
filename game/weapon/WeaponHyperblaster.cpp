@@ -232,7 +232,7 @@ stateResult_t rvWeaponHyperblaster::State_Fire ( const stateParms_t& parms ) {
 
 	yaw = player->viewAngles.yaw;
 	org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
-	dict.Set("classname", "char_marine_npc_strauss_core");
+	dict.Set("classname", "char_marine_hyperblaster");
 	dict.Set("angle", va("%f", yaw + 180));
 	dict.Set("origin", org.ToString());
 	

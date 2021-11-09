@@ -820,7 +820,7 @@ stateResult_t rvWeaponLightningGun::State_Fire( const stateParms_t& parms ) {
 
 	yaw = player->viewAngles.yaw;
 	org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
-	dict.Set("classname", "char_marine_tech");
+	dict.Set("classname", "char_marine_shotgun");
 	dict.Set("angle", va("%f", yaw + 180));
 	dict.Set("origin", org.ToString());
 
